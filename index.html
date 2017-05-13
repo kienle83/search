@@ -7,8 +7,8 @@
 
     <title>Searching</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -16,14 +16,17 @@
     <div class="container-fluid">
 
         <nav class="navbar navbar-light navbar-toggleable-md">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSearch" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#">Search</a>
+            <a class="navbar-brand" href="index.html">Activities</a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" id="search-form-input" name="q" type="text" autocomplete="off" placeholder="Search">
+            <div class="collapse navbar-collapse" id="navbarSearch">
+                <form id="search-header" method="get" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" id="search-form-input" name="q" type="text" autocomplete="off" placeholder="Where are you going?">
+                    <strong>Price (&#36;)</strong> &nbsp;
+                    <input type="text" maxlength="9" id="low-price" placeholder="Min" name="low-price" class="form-control">
+                    <input type="text" maxlength="9" id="high-price" placeholder="Max" name="high-price" class="form-control">
                     <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
@@ -32,21 +35,30 @@
     </div>
 
     <div class="jumbotron">
-        <div><span style="font-size:20px;font-weight:bold;">Found: </span></div> <hr/>
+        <div><h4 id="keywords"></h4></div> <hr/>
 
         <div class="row">
-            <div class="col-md-3">Filter</div>
-            <div class="col-md-9">Search results</div>
+            <div class="col-md-3">
+                <h5>Price (&#36;)</h5>
+
+                <div id="price-range"></div>
+            </div>
+
+            <div class="col-md-9">
+                <h5>Search results <span id="result-count"></span></h5>
+                <div id="result-box">
+
+                </div>
+            </div>
         </div>
 
     </div>
 
     <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="assets/js/tether.min.js"></script>
     <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="assets/js/angular.min.js"></script>
-
-    <script type="text/javascript" src="assets/js/app.js"></script>
+    <script type="text/javascript" src="assets/js/script.js"></script>
 
 </body>
 </html>

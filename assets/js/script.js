@@ -1,4 +1,6 @@
-$.urlParam = function(name) {
+
+/** Custom function */
+urlParam = function(name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
         return null;
@@ -7,9 +9,18 @@ $.urlParam = function(name) {
     }
 }
 
-var q = $.urlParam('q');
-var lowPrice = $.urlParam('low-price');
-var highPrice = $.urlParam('high-price');
+getKeywords = function(param) {
+    param = param.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    param = param.replace(/\\u[\dA-F]{4}/gi, function(match) {
+        return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+    });
+    return param;
+}
+/*********************/
+
+var q = urlParam('q');
+var lowPrice = urlParam('low-price');
+var highPrice = urlParam('high-price');
 
 if (q !== null && typeof(q) !== 'undefined' && q != 0) {
     var searchVal = decodeURIComponent(q.replace(/\+/g, ' '));
@@ -37,20 +48,16 @@ if (q !== null && typeof(q) !== 'undefined' && q != 0) {
         url: "https://raw.githubusercontent.com/kienle83/search/master/data/data.json",
         type: 'GET',
         success: function(data) {
-            var parsed = JSON.parse(data);
-            var tours = parsed.tours;
-            var results = [];
+            var parsed = JSON.parse(data),
+                tours = parsed.tours,
+                results = [];
 
             for (var i = 0 ; i < tours.length ; i++)
             {
                 var title = tours[i].title;
                 var price = tours[i].price;
 
-                title = title.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-                title = title.replace(/\\u[\dA-F]{4}/gi, function(match) {
-                    return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
-                });
-
+                title = getKeywords(title);
                 price = parseFloat(price);
 
                 if (title.toLowerCase().indexOf(searchVal.toLowerCase()) >= 0) {
@@ -74,8 +81,8 @@ if (q !== null && typeof(q) !== 'undefined' && q != 0) {
                 }
             }
 
-            var html  = '';
-            var count = results.length;
+            var html  = '',
+                count = results.length;
 
             for (var j = 0; j < count; j++) {
                 html += '<div class="card"><div class="card-block"><h4 class="card-title">' + results[j].title + '</h4><h6 class="card-subtitle mb-2 text-muted">Rating: ' + results[j].rating + '</h6><p class="card-text">Price: ' + results[j].price + ' ' + results[j].currency + '</p><a href="#" class="card-link">See more</a></div></div>';
@@ -86,7 +93,6 @@ if (q !== null && typeof(q) !== 'undefined' && q != 0) {
         }
     });
 }
-
 
 $('#search-form-input').autocomplete({
     source: function(request, response) {
@@ -102,19 +108,16 @@ $('#search-form-input').autocomplete({
                 for (var i = 0 ; i < tours.length ; i++)
                 {
                     var title = tours[i].title;
-                    title = title.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-                    title = title.replace(/\\u[\dA-F]{4}/gi, function(match) {
-                        return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
-                    });
+                    title = getKeywords(title);
 
                     if (title.toLowerCase().indexOf(searchVal.toLowerCase()) >= 0) {
-                        //results.push(tours[i]);
                         results.push(title);
                     }
                 }
 
                 if (results.length >= 5)
                     results = results.slice(0, 5);
+
                 response(results);
             }
         });
